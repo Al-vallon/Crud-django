@@ -6,39 +6,44 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Member Manager</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
-{% load static %}
-<link rel="stylesheet" href="{% static 'style.css' %}">
 
 <body>
     <div class="container">
         <h1>Members</h1>
+        {% if mem %}
         <table id="customers" border="1">
             <thead>
-                <th>Id</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Country</th>
+                <tr>
+                    <th>Id</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Country</th>
+                    <th>Actions</th>
+                </tr>
             </thead>
-
-            {% for data in mem %}
-            <tr>
-                <td>{{data.id}}</td>
-                <td>{{data.firstName}}</td>
-                <td>{{data.lastName}}</td>
-                <td>{{data.country}}</td>
-
-                <td>
-                    <a href="{% url 'update' data.id %}"><button id="up">Update</button></a>
-                </td>
-                <td>
-                    <a href="{% url 'delete' data.id %}"><button id="del">Delete</button></a>
-                </td>
-            </tr>
-            {% endfor %}
+            <tbody>
+                {% for data in mem %}
+                <tr>
+                    <td>{{ data.id }}</td>
+                    <td>{{ data.firstName }}</td>
+                    <td>{{ data.lastName }}</td>
+                    <td>{{ data.country }}</td>
+                    <td>
+                        <a href="{% url 'update_member' data.id %}"> <button id="up">Update</button></a>
+                        <a href="{% url 'delete_member' data.id %}"> <button id="del">Delete</button></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
         </table>
+        {% else %}
+        <p>No members found. You can add a new member using the button below.</p>
+        {% endif %}
         <br><br>
-        <a href="{% url 'add' %}"><button id="new3">Add Member</button></a>
+        <a href="{% url 'add_member' %}"><button id="new3">Add Member</button></a>
     </div>
 </body>
 

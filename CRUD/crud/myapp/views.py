@@ -1,48 +1,37 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Member
-
+from .forms import MemberForm
 
 # Create your views here.
 def index(request):
     mem = Member.objects.all()
     return render(request, "index.html", {'mem': mem})
 
-# render view for add member
-
+# Render view for add member
 def add(request):
-    return render(request, 'add.html')
+    if request.method == 'POST':
+        form = MemberForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+    else:
+        form = MemberForm()
+    return render(request, 'add.html', {'form': form})
 
-#post
-def addpost(request):
-    first = request.POST['first']
-    last = request.POST['last']
-    country = request.POST['country']
-
-    newmem=Member(firstName=first, lastName=last, country=country)
-    newmem.save()
-    return redirect('/')
-
-
-#delete user
+# Delete user
 def delete(request, id):
-    mem=Member.objects.get(id=id)
+    mem = get_object_or_404(Member, id=id)
     mem.delete()
     return redirect('/')
 
-#update member
-def update(request, id):
-    updatemem=Member.objects.get(id=id)
-    return render(request, 'update.html', {'updatemem': updatemem })
-
-def up(request,id):
-    upfirst=request.POST['first']
-    uplast=request.POST['last']
-    upcountry=request.POST['country']
-    updatesave=Member.objects.get(id=id)
-    updatesave.firstName=upfirst
-    updatesave.lastName=uplast
-    updatesave.country=upcountry
-
-    updatesave.save()
-    return redirect('/')
-
+# Update member
+def update_member(request, id):
+    mem = get_object_or_404(Member, id=id)
+    if request.method == 'POST':
+        form = MemberForm(request.POST, instance=mem)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+    else:
+        form = MemberForm(instance=mem)
+    return render(request, 'update.html', {'form': form,'updatemem': mem})

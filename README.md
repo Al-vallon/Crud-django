@@ -99,3 +99,4 @@ Une application web simple utilisant Django pour gérer les opérations CRUD (Cr
 Ce projet est sous la licence [MIT](LICENSE).
 
 
+![example](https://github.com/user-attachments/assets/16831a67-c168-4304-9174-323c28c12a43)
